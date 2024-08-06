@@ -15,3 +15,17 @@ class Reward(db.Model):
     receiver = db.relationship('User', foreign_keys=[receiver_id], back_populates='rewards_received')
     payer = db.relationship('User', foreign_keys=[payer_id], back_populates='rewards_paid')
     found_report = db.relationship('FoundReport', back_populates='rewards')
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'amount': self.amount,
+            'date_paid': self.date_paid.isoformat() if self.date_paid else None,
+            'date_offered': self.date_offered.isoformat() if self.date_offered else None,
+            'receiver_id': self.receiver_id,
+            'receiver_username': self.receiver_username,
+            'payer_username': self.payer_username,
+            'payer_id': self.payer_id,
+            'found_report_id': self.found_report_id
+        }
+

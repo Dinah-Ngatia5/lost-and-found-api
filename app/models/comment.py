@@ -9,3 +9,14 @@ class Comment(db.Model):
 
     user = db.relationship('User', back_populates='comments')
     item = db.relationship('Item', back_populates='comments')
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'item_id': self.item_id,
+            'content': self.content,
+            'timestamp': self.timestamp.isoformat() if self.timestamp else None
+        }
+
+

@@ -28,3 +28,21 @@ class FoundReport(db.Model):
     @staticmethod
     def get_item_by_name(name):
         return Item.query.filter_by(name=name).first()
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'item_id': self.item_id,
+            'item_name': self.item_name,
+            'description': self.description,
+            'date_found': self.date_found.isoformat(),  # Convert date to string
+            'time_found': str(self.time_found),  # Convert time to string
+            'primary_color': self.primary_color,
+            'secondary_color': self.secondary_color,
+            'place_found': self.place_found,
+            'upload_image': self.upload_image,
+            'contact': self.contact,
+            'claims': [claim.to_dict() for claim in self.claims],
+            'rewards': [reward.to_dict() for reward in self.rewards]
+        }

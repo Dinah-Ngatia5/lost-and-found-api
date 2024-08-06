@@ -14,7 +14,7 @@ class User(db.Model, UserMixin):
     rewards_paid = db.relationship('Reward', foreign_keys='Reward.payer_id', back_populates='payer', lazy=True)
     reset_tokens = db.relationship('PasswordResetToken', back_populates='user', lazy=True)
     comments = db.relationship('Comment', back_populates='user')
-    
+
     @property
     def password(self):
         raise AttributeError('password is not a readable attribute')
@@ -28,5 +28,14 @@ class User(db.Model, UserMixin):
     
     def is_admin(self):
         return self.role == 'admin'
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'username': self.username,
+            'email': self.email,
+            'role': self.role,
+
+        }
 
   

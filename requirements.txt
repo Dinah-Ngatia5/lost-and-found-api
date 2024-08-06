@@ -22,7 +22,7 @@ click==8.1.7
 cryptography==42.0.8
 dnspython==2.6.1
 email_validator==2.2.0
-eventlet==0.36.1
+eventlet>=0.36.1
 Flask==3.0.3
 flask-babel==4.0.0
 Flask-Bcrypt==1.0.1
@@ -43,7 +43,7 @@ google-auth==2.32.0
 google-auth-httplib2==0.2.0
 google-auth-oauthlib==1.2.0
 googleapis-common-protos==1.63.2
-greenlet==3.0.3
+greenlet>=1.0,<2.0
 gunicorn==22.0.0
 h11==0.14.0
 httpagentparser==1.9.5
@@ -74,7 +74,7 @@ oauthlib==3.2.2
 packaging==24.1
 paramiko==3.4.0
 passlib==1.7.4
-pgadmin4==8.9
+pgadmin4<=8.9
 portalocker==2.10.1
 proto-plus==1.24.0
 protobuf==5.27.2

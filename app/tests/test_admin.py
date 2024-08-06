@@ -12,7 +12,11 @@ def test_admin_dashboard_access(test_client, init_database):
     # Access admin dashboard
     response = test_client.get('/admin/dashboard')
     assert response.status_code == 200
-    assert b'Admin Dashboard' in response.data
+    data = json.loads(response.data)
+    assert 'lost_reports' in data
+    assert 'found_reports' in data
+    assert 'claims' in data
+    assert 'rewards' in data
 
 def test_add_item(test_client, init_database):
     # Login as admin
@@ -23,13 +27,16 @@ def test_add_item(test_client, init_database):
     assert response.status_code == 200
 
     # Add item
-    response = test_client.post('/admin/items', data=dict(
-        name='Test Item',
-        description='Test Description',
-        image_url='http://example.com/image.jpg'
-    ), follow_redirects=True)
+    data = {
+        'name': 'Test Item',
+        'description': 'Test Description'
+    }
+    response = test_client.post('/admin/items', 
+                                data=json.dumps(data),
+                                content_type='application/json')
     assert response.status_code == 201
-    assert b'Item added successfully' in response.data
+    response_data = json.loads(response.data)
+    assert 'Item added successfully' in response_data['message']
 
 def test_update_item(test_client, init_database):
     # Login as admin
@@ -40,21 +47,26 @@ def test_update_item(test_client, init_database):
     assert response.status_code == 200
 
     # Add item
-    response = test_client.post('/admin/items', data=dict(
-        name='Test Item',
-        description='Test Description',
-        image_url='http://example.com/image.jpg'
-    ), follow_redirects=True)
+    data = {
+        'name': 'Test Item',
+        'description': 'Test Description'
+    }
+    response = test_client.post('/admin/items', 
+                                data=json.dumps(data),
+                                content_type='application/json')
     assert response.status_code == 201
 
     # Update item
-    response = test_client.put('/admin/items/1', data=dict(
-        name='Updated Test Item',
-        description='Updated Test Description',
-        image_url='http://example.com/updated_image.jpg'
-    ), follow_redirects=True)
+    update_data = {
+        'name': 'Updated Test Item',
+        'description': 'Updated Test Description'
+    }
+    response = test_client.put('/admin/items/1', 
+                               data=json.dumps(update_data),
+                               content_type='application/json')
     assert response.status_code == 200
-    assert b'Item updated successfully' in response.data
+    response_data = json.loads(response.data)
+    assert 'Item updated successfully' in response_data['message']
 
 def test_delete_item(test_client, init_database):
     # Login as admin
@@ -65,14 +77,17 @@ def test_delete_item(test_client, init_database):
     assert response.status_code == 200
 
     # Add item
-    response = test_client.post('/admin/items', data=dict(
-        name='Test Item',
-        description='Test Description',
-        image_url='http://example.com/image.jpg'
-    ), follow_redirects=True)
+    data = {
+        'name': 'Test Item',
+        'description': 'Test Description'
+    }
+    response = test_client.post('/admin/items', 
+                                data=json.dumps(data),
+                                content_type='application/json')
     assert response.status_code == 201
 
     # Delete item
-    response = test_client.delete('/admin/items/1', follow_redirects=True)
+    response = test_client.delete('/admin/items/1')
     assert response.status_code == 200
-    assert b'Item deleted successfully' in response.data
+    response_data = json.loads(response.data)
+    assert 'Item deleted successfully' in response_data['message']
